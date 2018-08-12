@@ -2,9 +2,10 @@
 language: julia
 os:
   - linux
-  - osx
+  # - osx
 julia:
   - 0.7
+  - 1.0
   - nightly
 notifications:
   email: false
@@ -17,19 +18,26 @@ matrix:
   allow_failures:
   - julia: nightly
 
-## uncomment and modify the following lines to manually install system packages
-#addons:
-#  apt: # apt-get for linux
-#    packages:
-#    - gfortran
-#before_script: # homebrew for mac
-#  - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
+addons:
+  apt: # apt-get for linux
+    packages:
+    - cmake
+    - libboost-all-dev
+    - build-essential
+    - zlib1g-dev
+    - libsdl2-dev
+    - libjpeg-dev
+    - nasm
+    - tar
+    - libbz2-dev
+    - libgtk2.0-dev
+    - git
+    - libfluidsynth-dev
+    - libgme-dev
+    - libopenal-dev
+    - timidity
+    - libwildmidi-dev
+    - unzip
 
-## uncomment the following lines to override the default test script
-#script:
-#  - julia -e 'Pkg.clone(pwd()); Pkg.build("VizDoom"); Pkg.test("VizDoom"; coverage=true)'
-after_success:
-  # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("VizDoom")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
-  # push coverage results to Codecov
-  - julia -e 'cd(Pkg.dir("VizDoom")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+script:
+  - julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate(); Pkg.build("ViZDoom");'
