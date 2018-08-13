@@ -1,6 +1,6 @@
 # ViZDoom
 
-[![Build Status](https://travis-ci.org/JuliaReinforcementLearning/ViZDoom.jl.svg?branch=master)](https://travis-ci.org/JuliaReinforcementLearning/ViZDoom.jl)
+[![Build Status](https://travis-ci.com/JuliaReinforcementLearning/ViZDoom.jl.svg?branch=master)](https://travis-ci.org/JuliaReinforcementLearning/ViZDoom.jl)
 
 This package provides a wrapper around the [ViZDoom](https://github.com/mwydmuch/ViZDoom) and also some typical scenarios. Enjoy it!
 
