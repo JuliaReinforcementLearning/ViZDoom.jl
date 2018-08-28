@@ -20,7 +20,10 @@ matrix:
 
 addons:
   apt: # apt-get for linux
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
+    - g++-4.9
     - cmake
     - libboost-all-dev
     - build-essential
@@ -38,6 +41,9 @@ addons:
     - timidity
     - libwildmidi-dev
     - unzip
+
+env:
+  - CC=gcc-4.9 && CXX=g++-4.9
 
 script:
   - julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate(); Pkg.build("ViZDoom");'
