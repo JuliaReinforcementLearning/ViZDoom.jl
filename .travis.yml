@@ -20,7 +20,10 @@ matrix:
 
 addons:
   apt: # apt-get for linux
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
+    - g++-4.9
     - cmake
     - libboost-all-dev
     - build-essential
@@ -39,12 +42,6 @@ addons:
     - libwildmidi-dev
     - unzip
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
 env:
   - CC=gcc-4.9 && CXX=g++-4.9
 
