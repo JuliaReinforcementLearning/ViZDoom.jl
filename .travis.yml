@@ -23,7 +23,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-    - g++-4.9
+    - g++-6
     - cmake
     - libboost-all-dev
     - build-essential
@@ -43,7 +43,7 @@ addons:
     - unzip
 
 env:
-  - CC=gcc-4.9 && CXX=g++-4.9
+  - CC=gcc-6 && CXX=g++-6
 
 after_success:
   # push coverage results to Coveralls
