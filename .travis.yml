@@ -43,7 +43,7 @@ addons:
     - unzip
 
 env:
-  - CC=gcc-7 && CXX=g++-7
+  - CC=gcc-7 && CXX=g++-7 && LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/travis/.julia/packages/CxxWrap/Ho7vF/deps/usr/lib/
 
 after_success:
   # push coverage results to Coveralls
