@@ -45,5 +45,8 @@ addons:
 env:
   - CC=gcc-4.9 && CXX=g++-4.9
 
-script:
-  - julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate(); Pkg.build("ViZDoom");'
+after_success:
+  # push coverage results to Coveralls
+  - julia -e 'cd(Pkg.dir("VizDoom")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  # push coverage results to Codecov
+  - julia -e 'cd(Pkg.dir("VizDoom")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
