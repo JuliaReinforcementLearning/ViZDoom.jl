@@ -19,3 +19,4 @@ const cmake_cmd = `cmake -DJlCxx_DIR=$(JLCxx_DIR) -DBUILD_JULIA=ON -DJulia_EXECU
 @info cmake_cmd
 cd(() -> run(cmake_cmd), vizdoom_dir)
 cd(() -> run(`make`), vizdoom_dir)
+error()
