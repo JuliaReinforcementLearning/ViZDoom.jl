@@ -1,4 +1,6 @@
 find_package(JlCxx REQUIRED)
+set(CMAKE_MACOSX_RPATH 1)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_DIR}/../")
 
 add_library(vizdoomjl SHARED ViZDoomJuliaModule.cpp)
 target_link_libraries(vizdoomjl JlCxx::cxxwrap_julia ${VIZDOOM_LIBS} libvizdoom_static)
