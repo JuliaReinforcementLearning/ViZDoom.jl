@@ -31,7 +31,7 @@ struct IsBits<GameVariable> : std::true_type
 };
 } // namespace jlcxx
 
-JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
+JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
 {
     /* Consts */
     /*----------------------------------------------------------------------------------------------------------------*/
