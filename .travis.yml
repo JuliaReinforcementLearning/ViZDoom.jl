@@ -44,6 +44,3 @@ addons:
 
 env:
   - CC=gcc-4.9 && CXX=g++-4.9
-
-script:
-  - julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate(); Pkg.build("ViZDoom");'
