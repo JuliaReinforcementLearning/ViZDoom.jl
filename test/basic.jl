@@ -1,4 +1,4 @@
-game = basic_game()
+game = basic_game(;window_visible=false)
 
 ViZDoom.init(game)
 
