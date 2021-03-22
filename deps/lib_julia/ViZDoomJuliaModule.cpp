@@ -3,57 +3,31 @@
 
 using namespace vizdoom;
 
-namespace jlcxx
-{
-template <>
-struct IsBits<Mode> : std::true_type
-{
-};
-template <>
-struct IsBits<ScreenFormat> : std::true_type
-{
-};
-template <>
-struct IsBits<ScreenResolution> : std::true_type
-{
-};
-template <>
-struct IsBits<AutomapMode> : std::true_type
-{
-};
-template <>
-struct IsBits<Button> : std::true_type
-{
-};
-template <>
-struct IsBits<GameVariable> : std::true_type
-{
-};
-} // namespace jlcxx
 
-JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
+JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
 {
     /* Consts */
     /*----------------------------------------------------------------------------------------------------------------*/
-    mod.set_const("SLOT_COUNT", SLOT_COUNT);
-    mod.set_const("MAX_PLAYERS", MAX_PLAYERS);
-    mod.set_const("MAX_PLAYER_NAME_LENGTH", MAX_PLAYER_NAME_LENGTH);
-    mod.set_const("USER_VARIABLE_COUNT", USER_VARIABLE_COUNT);
-    mod.set_const("DEFAULT_TICRATE", DEFAULT_TICRATE);
+    // Convert these to ints so division/addition/etc work, otherwise they are of type cxxwrap:uint32ptr
+    mod.set_const("SLOT_COUNT", int(SLOT_COUNT));
+    mod.set_const("MAX_PLAYERS", int(MAX_PLAYERS));
+    mod.set_const("MAX_PLAYER_NAME_LENGTH", int(MAX_PLAYER_NAME_LENGTH));
+    mod.set_const("USER_VARIABLE_COUNT", int(USER_VARIABLE_COUNT));
+    mod.set_const("DEFAULT_TICRATE", int(DEFAULT_TICRATE));
 
-    mod.set_const("BINARY_BUTTON_COUNT", BINARY_BUTTON_COUNT);
-    mod.set_const("DELTA_BUTTON_COUNT", DELTA_BUTTON_COUNT);
-    mod.set_const("BUTTON_COUNT", BUTTON_COUNT);
+    mod.set_const("BINARY_BUTTON_COUNT", int(BINARY_BUTTON_COUNT));
+    mod.set_const("DELTA_BUTTON_COUNT", int(DELTA_BUTTON_COUNT));
+    mod.set_const("BUTTON_COUNT", int(BUTTON_COUNT));
 
     /* Enums */
     /*----------------------------------------------------------------------------------------------------------------*/
-    mod.add_bits<Mode>("Mode");
+    mod.add_bits<Mode>("Mode", jlcxx::julia_type("CppEnum"));
     mod.set_const("PLAYER", PLAYER);
     mod.set_const("SPECTATOR", SPECTATOR);
     mod.set_const("ASYNC_PLAYER", ASYNC_PLAYER);
     mod.set_const("ASYNC_SPECTATOR", ASYNC_SPECTATOR);
 
-    mod.add_bits<ScreenFormat>("ScreenFormat");
+    mod.add_bits<ScreenFormat>("ScreenFormat", jlcxx::julia_type("CppEnum"));
     mod.set_const("CRCGCB", CRCGCB);
     mod.set_const("RGB24", RGB24);
     mod.set_const("RGBA32", RGBA32);
@@ -65,7 +39,7 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
     mod.set_const("GRAY8", GRAY8);
     mod.set_const("DOOM_256_COLORS8", DOOM_256_COLORS8);
 
-    mod.add_bits<ScreenResolution>("ScreenResolution");
+    mod.add_bits<ScreenResolution>("ScreenResolution", jlcxx::julia_type("CppEnum"));
     mod.set_const("RES_160X120", RES_160X120);
 
     mod.set_const("RES_200X125", RES_200X125);
@@ -115,13 +89,13 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
 
     mod.set_const("RES_1920X1080", RES_1920X1080);
 
-    mod.add_bits<AutomapMode>("AutomapMode");
+    mod.add_bits<AutomapMode>("AutomapMode", jlcxx::julia_type("CppEnum"));
     mod.set_const("NORMAL", NORMAL);
     mod.set_const("WHOLE", WHOLE);
     mod.set_const("OBJECTS", OBJECTS);
     mod.set_const("OBJECTS_WITH_SIZE", OBJECTS_WITH_SIZE);
 
-    mod.add_bits<Button>("Button");
+    mod.add_bits<Button>("Button", jlcxx::julia_type("CppEnum"));
     mod.set_const("ATTACK", ATTACK);
     mod.set_const("USE", USE);
     mod.set_const("JUMP", JUMP);
@@ -166,7 +140,7 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
     mod.set_const("MOVE_LEFT_RIGHT_DELTA", MOVE_LEFT_RIGHT_DELTA);
     mod.set_const("MOVE_UP_DOWN_DELTA", MOVE_UP_DOWN_DELTA);
 
-    mod.add_bits<GameVariable>("GameVariable");
+    mod.add_bits<GameVariable>("GameVariable", jlcxx::julia_type("CppEnum"));
     mod.set_const("KILLCOUNT", KILLCOUNT);
     mod.set_const("ITEMCOUNT", ITEMCOUNT);
     mod.set_const("SECRETCOUNT", SECRETCOUNT);
@@ -312,16 +286,21 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
         .method("object_velocity_y", [](Label &l) { return l.objectVelocityY; })
         .method("object_velocity_z", [](Label &l) { return l.objectVelocityZ; });
 
-    mod.add_type<Buffer>("Buffer");
+    // This line breaks CxxWrap, double registration, already mapped type, etc...
+    // mod.add_type<Buffer>("Buffer");
+
     mod.add_type<GameState>("GameState")
         .method("number", [](GameState &gs) { return gs.number; })
         .method("tic", [](GameState &gs) { return gs.tic; })
-        .method("game_variables", [](GameState &gs) { return jlcxx::ArrayRef<double, 1>(&(gs.gameVariables[0]), gs.gameVariables.size()); })
+        .method("game_variables", [](GameState &gs) { return jlcxx::ArrayRef<double, 1>(gs.gameVariables.data(), gs.gameVariables.size()); })
         .method("screen_buffer", [](GameState &gs) { return gs.screenBuffer; })
         .method("depth_buffer", [](GameState &gs) { return gs.depthBuffer; })
         .method("labels_buffer", [](GameState &gs) { return gs.labelsBuffer; })
-        .method("automap_buffer", [](GameState &gs) { return gs.automapBuffer; })
-        .method("labels", [](GameState &gs) { return jlcxx::ArrayRef<Label, 1>(&(gs.labels[0]), gs.labels.size()); });
+        .method("automap_buffer", [](GameState &gs) { return gs.automapBuffer; });
+        // TODO: figure out how to return this? The below code breaks
+        // .method("labels", [](GameState &gs) { 
+        //     return jlcxx::ArrayRef<Label, 1>(labels.data(), labels.size()); 
+        // });
 
     mod.add_type<ServerState>("ServerState")
         .method("player_count", [](ServerState &ss) { return ss.playerCount; })
@@ -347,8 +326,9 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
         .method("is_player_dead", &DoomGame::isPlayerDead)
         .method("respawn_player", &DoomGame::respawnPlayer)
         .method("set_action", [](DoomGame &dg, jlcxx::ArrayRef<double, 1> actions) {
-        std::vector<double> data(actions.begin(), actions.end());
-        dg.setAction(data); })
+            std::vector<double> data(actions.begin(), actions.end());
+            dg.setAction(data); 
+        })
         .method("make_action", [](DoomGame &dg, jlcxx::ArrayRef<double, 1> actions) {
             std::vector<double> data(actions.begin(), actions.end());
             return dg.makeAction(data);
@@ -358,6 +338,7 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
             return dg.makeAction(data, tics);
         })
         .method("advance_action", &DoomGame::advanceAction)
+        // TODO: What does this do that the above line doesn't?
         .method("advance_action", [](DoomGame &dg) { dg.advanceAction(); })
         .method("get_state", &DoomGame::getState)
         .method("get_server_state", &DoomGame::getServerState)
@@ -370,7 +351,10 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
         .method("get_last_reward", &DoomGame::getLastReward)
         .method("get_total_reward", &DoomGame::getTotalReward)
         .method("get_last_action", &DoomGame::getLastAction)
-        .method("get_available_game_variables", &DoomGame::getAvailableGameVariables)
+        .method("get_available_game_variables", [](DoomGame &dg) {
+            std::vector<GameVariable> gvs = dg.getAvailableGameVariables();
+            return jlcxx::ArrayRef<GameVariable, 1>(gvs.data(), gvs.size()); 
+        })
         .method("set_available_game_variables", [](DoomGame &dg, jlcxx::ArrayRef<GameVariable, 1> gv) {
             std::vector<GameVariable> data(gv.begin(), gv.end());
             dg.setAvailableGameVariables(data);
@@ -378,7 +362,10 @@ JLCXX_MODULE ViZDoom(jlcxx::Module &mod)
         .method("add_available_game_variable", &DoomGame::addAvailableGameVariable)
         .method("clear_available_game_variables", &DoomGame::clearAvailableGameVariables)
         .method("get_available_game_variables_size", &DoomGame::getAvailableGameVariablesSize)
-        .method("get_available_buttons", &DoomGame::getAvailableButtons)
+        .method("get_available_buttons", [](DoomGame &dg) {
+            std::vector<Button> buttons = dg.getAvailableButtons();
+            return jlcxx::ArrayRef<Button, 1>(buttons.data(), buttons.size()); 
+        })
         .method("set_available_buttons", [](DoomGame &dg, jlcxx::ArrayRef<Button, 1> buttons) {
             std::vector<Button> data(buttons.begin(), buttons.end());
             dg.setAvailableButtons(data);

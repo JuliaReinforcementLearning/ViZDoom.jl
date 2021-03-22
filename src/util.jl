@@ -1,4 +1,5 @@
-const scenario_dir = joinpath(@__DIR__, "..", "deps", "usr", "ViZDoom-1.1.6", "scenarios")
+const vizdoom_artifact_dir = artifact"ViZDoom"
+const scenario_dir = joinpath(vizdoom_artifact_dir, "ViZDoom-1.1.8", "scenarios")
 
 
 function get_scenario_path(s::AbstractString)

@@ -1,9 +1,10 @@
 name = "ViZDoom"
 uuid = "befec858-9df8-11e8-00a8-a968a6be5c52"
-authors = ["Johanni Brea <johanni.brea@epfl.ch>", "Jun Tian <find_my_way@foxmail.com>"]
-version = "0.1.0"
+authors = ["Johanni Brea <johanni.brea@epfl.ch>", "Jun Tian <find_my_way@foxmail.com>", "IslandMan93 <islandman93@gmail.com>"]
+version = "0.1.1"
 
 [deps]
+Artifacts = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 BinaryProvider = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
 CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
