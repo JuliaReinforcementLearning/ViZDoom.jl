@@ -28,3 +28,7 @@ Beyond that, some helper functions are also provided:
 - `set_game(game; kw...)`. It's really verbose to set the game line by line. This function comes to simplify the process. The name of the argument should be the same with the original method without the `set_` or `add_` prefix. For example, we can use `set(game; doom_map="map01, mode=PLAYER")` to replace the original methods like`ViZDoom.set_doom_map(game, "map01"); ViZDoom.set_mode(game, "PLAYER")`. You can checkout the detailed examples in the `src/games`folder. Following are some special arguments:
     - `available_buttons` The original method name is `add_available_button`. Here you can set `available_buttons=[MOVE_LEFT, MOVE_RIGHT, ATTACK]`.
 - `basic_game(;kw...)`. A simple game with default config is returned. (More default configs are coming soon.)
+
+## Docker usage
+Build the container with `docker build -t vizdoom.jl .` which installs all ViZDoom dependencies.
+Run the container with `docker run -it --rm vizdoom.jl`, the `--rm` flag can be omitted if you want to create multiple containers.
