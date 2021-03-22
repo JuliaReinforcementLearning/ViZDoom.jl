@@ -13,5 +13,6 @@ COPY . /home/root/ViZDoom
 WORKDIR /home/root/ViZDoom
 
 # Run the install
+RUN julia -e 'using Pkg; Pkg.add(path="./")'
 
 ENTRYPOINT [ "/bin/bash" ]
