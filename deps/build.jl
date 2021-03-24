@@ -14,7 +14,9 @@ const JLCxx_DIR = get(ENV, "JLCXX_DIR", joinpath(CxxWrap.prefix_path(), "lib", "
 const cmake_cmd = `cmake -DJlCxx_DIR=$(JLCxx_DIR) -DBUILD_JULIA=ON -DJulia_EXECUTABLE=$(joinpath(Sys.BINDIR, "julia")) .`
 @info cmake_cmd
 cd(() -> run(cmake_cmd), vizdoom_dir)
-cd(() -> run(`make`), vizdoom_dir)
+# build with num_cores - 1. Saving 1 for the user
+num_cores = parse(Int, read(`nproc`, String))
+cd(() -> run(`make -j $(num_cores - 1)`), vizdoom_dir)
 
 # Copy freedoom2.wad into bin where everything else is.
 # The default config looks for ./freedoom2.wad so this allows for simpler configs
