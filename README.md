@@ -30,5 +30,21 @@ Beyond that, some helper functions are also provided:
 - `basic_game(;kw...)`. A simple game with default config is returned. (More default configs are coming soon.)
 
 ## Docker usage
-Build the container with `docker build -t vizdoom.jl .` which installs all ViZDoom dependencies.
-Run the container with `docker run -it --rm vizdoom.jl`, the `--rm` flag can be omitted if you want to create multiple containers.
+Build the container with:
+```bash
+docker build -t vizdoom.jl .
+```
+which installs Julia v1.6, all ViZDoom dependencies, and builds this package.
+
+Run the container with:
+```bash
+docker run -it --rm vizdoom.jl
+```
+The `--rm` flag can be omitted if you want to create multiple containers.
+
+## Development with VSCode
+Download/install VSCode and the [Remote Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) and follow the extra install steps there for using docker as a non-root user. Then open VSCode and do `Ctrl + Shift + p` and select the `Remote Containers: Rebuild and Reopen in Container` option. 
+
+### Visualization with containers
+If you want to view the game when in a VSCode devcontainer you'll need to run `xhost +local:root` before starting VSCode. NOTE: this is a technically unsafe command, see [here](http://wiki.ros.org/docker/Tutorials/GUI) for some details. For the security conscious you should run `xhost -local:root` after you're done.
+This option is tested with Ubuntu only, you may need other workarounds for different OSes.
