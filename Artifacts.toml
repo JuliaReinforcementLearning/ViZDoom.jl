@@ -1,0 +1,6 @@
+[ViZDoom]
+git-tree-sha1 = "7d63ffbf41233f9167b8948641e0439e759a24bf"
+
+    [[ViZDoom.download]]
+    sha256 = "ca031dd5b36ab338d3b78d332f5633870fd7361420d56e710c3e59655eaf0b43"
+    url = "https://github.com/mwydmuch/ViZDoom/archive/1.1.8.tar.gz"

@@ -1,11 +1,9 @@
 ## Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
-os:
-  - linux
-  # - osx
+dist: bionic
 julia:
-  - 0.7
   - 1.0
+  - 1.6
   - nightly
 notifications:
   email: false
@@ -23,7 +21,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-    - g++-4.9
+    - g++-7
     - cmake
     - libboost-all-dev
     - build-essential
@@ -43,7 +41,7 @@ addons:
     - unzip
 
 env:
-  - CC=gcc-4.9 && CXX=g++-4.9
+  - CC=gcc-7 && CXX=g++-7
 
 script:
   - julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate(); Pkg.build("ViZDoom");'

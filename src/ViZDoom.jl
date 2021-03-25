@@ -1,7 +1,9 @@
 module ViZDoom
 
+using Artifacts
 using CxxWrap
-@wrapmodule(joinpath(@__DIR__, "..", "deps", "usr", "ViZDoom-1.1.6", "bin", "libvizdoomjl.so"), :ViZDoom)
+const vizdoom_artifact_dir = artifact"ViZDoom"
+@wrapmodule(joinpath(vizdoom_artifact_dir, "ViZDoom-1.1.8", "bin", "libvizdoomjl.so"))
 
 function __init__()
     @initcxx
