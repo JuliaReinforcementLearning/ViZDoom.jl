@@ -23,7 +23,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-    - g++-7.4
+    - g++-7
     - cmake
     - libboost-all-dev
     - build-essential
@@ -43,7 +43,7 @@ addons:
     - unzip
 
 env:
-  - CC=gcc-7.4 && CXX=g++-7.4
+  - CC=gcc-7 && CXX=g++-7
 
 script:
   - julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate(); Pkg.build("ViZDoom");'
