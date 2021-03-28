@@ -16,5 +16,37 @@ println(ViZDoom.DoomGame)
 # Enum tests
 @assert typeof(ViZDoom.PLAYER) == ViZDoom.Mode
 
+# trying to access before init throws load error
+try
+    game = basic_game(;window_visible=false)
+    # this should throw
+    ViZDoom.get_screen_buffer(game)
+catch LoadError
+end
+
+# this should throw nullptr: accessing after a game is over without reset
+game = basic_game(;window_visible=false)
+ViZDoom.init(game)
+ViZDoom.new_episode(game)
+while !ViZDoom.is_episode_finished(game)
+    ViZDoom.make_action(game, [1.])
+end
+try
+    ViZDoom.get_screen_buffer(game)
+catch LoadError
+end
+try
+    ViZDoom.get_automap_buffer(game)
+catch LoadError
+end
+try
+    ViZDoom.get_depth_buffer(game)
+catch LoadError
+end
+try
+    ViZDoom.get_labels_buffer(game)
+catch LoadError
+end
+
 # Basic test
 include("basic.jl")
