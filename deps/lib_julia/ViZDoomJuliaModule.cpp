@@ -427,29 +427,56 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
         .method("get_screen_size", &DoomGame::getScreenSize)
         .method("get_screen_pitch", &DoomGame::getScreenPitch)
         .method("get_screen_format", &DoomGame::getScreenFormat)
-        // TODO:
-        //
-        //  1. null check
+        // NOTE: state can be nullptr at the end of game
+        // Throw a logic_error so Julia can get this exception instead of segfault
         .method("get_screen_buffer", [](DoomGame &dg) {
             GameStatePtr state = dg.getState();
+            if (state == nullptr){
+                throw std::logic_error("Calling a function that "
+                    "requires gameState when it is nullptr. "
+                    "This happens if the episode is finished but not re-initialized"
+                    " with new_episode.");
+            }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->screenBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight() * dg.getScreenChannels()); })
+                state->screenBuffer->data(), state->screenBuffer->size()
+            );
+        })
         .method("get_depth_buffer", [](DoomGame &dg) {
             GameStatePtr state = dg.getState();
+            if (state == nullptr){
+                throw std::logic_error("Calling a function that "
+                    "requires gameState when it is nullptr. "
+                    "This happens if the episode is finished but not re-initialized"
+                    " with new_episode.");
+            }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->depthBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight()); })
+                state->depthBuffer->data(), state->depthBuffer->size()
+            ); 
+        })
         .method("get_labels_buffer", [](DoomGame &dg) {
             GameStatePtr state = dg.getState();
+            if (state == nullptr){
+                throw std::logic_error("Calling a function that "
+                    "requires gameState when it is nullptr. "
+                    "This happens if the episode is finished but not re-initialized"
+                    " with new_episode.");
+            }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->labelsBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight()); })
+                state->labelsBuffer->data(), state->labelsBuffer->size()
+            ); 
+        })
         .method("get_automap_buffer", [](DoomGame &dg) {
             GameStatePtr state = dg.getState();
+            if (state == nullptr){
+                throw std::logic_error("Calling a function that "
+                    "requires gameState when it is nullptr. "
+                    "This happens if the episode is finished but not re-initialized"
+                    " with new_episode.");
+            }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->automapBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight() * dg.getScreenChannels()); });
+                state->automapBuffer->data(), state->automapBuffer->size()
+            ); 
+        });
 
     mod.method("doom_tics_to_ms", doomTicsToMs);
     mod.method("ms_to_doom_tics", msToDoomTics);
