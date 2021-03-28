@@ -450,8 +450,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
                     " with new_episode.");
             }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->depthBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight()); })
+                state->depthBuffer->data(), state->depthBuffer->size()
+            ); 
+        })
         .method("get_labels_buffer", [](DoomGame &dg) {
             GameStatePtr state = dg.getState();
             if (state == nullptr){
@@ -461,8 +462,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
                     " with new_episode.");
             }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->labelsBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight()); })
+                state->labelsBuffer->data(), state->labelsBuffer->size()
+            ); 
+        })
         .method("get_automap_buffer", [](DoomGame &dg) {
             GameStatePtr state = dg.getState();
             if (state == nullptr){
@@ -472,8 +474,9 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
                     " with new_episode.");
             }
             return jlcxx::ArrayRef<uint8_t, 1>(
-                state->automapBuffer->data(),
-                 dg.getScreenWidth() * dg.getScreenHeight() * dg.getScreenChannels()); });
+                state->automapBuffer->data(), state->automapBuffer->size()
+            ); 
+        });
 
     mod.method("doom_tics_to_ms", doomTicsToMs);
     mod.method("ms_to_doom_tics", msToDoomTics);
